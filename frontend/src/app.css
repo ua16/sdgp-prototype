@@ -1,1 +1,15 @@
+/* Jarkarta */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+/* Noto Serif */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
+
 @import "tailwindcss";
+
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-optical-sizing: auto;
+}
+
+@theme {
+    --font-serif: "Noto Serif", serif;
+}

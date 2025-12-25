@@ -1,7 +1,9 @@
-<nav>
-    <a href="/">Home</a>
-</nav>
+<script>
+    import Navbar from "./Navbar.svelte";
+    import Marketing from "./Marketing.svelte";
+</script>
 
-<main>
-
-</main>
+<div>
+    <Navbar />
+    <Marketing />
+</div>
