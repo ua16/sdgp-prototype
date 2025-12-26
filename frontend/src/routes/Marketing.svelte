@@ -66,7 +66,7 @@
     </div>
 
     <div class="grid place-items-center w-screen">
-        <div class="max-w-300 flex flex-col md:flex-row items-center">
+        <div class="max-w-300 flex flex-col items-center p-10">
             <h2 class="text-4xl font-bold">More Text</h2>
             <p class="font-serif">
                 Elit aut aliquid praesentium placeat veritatis consectetur

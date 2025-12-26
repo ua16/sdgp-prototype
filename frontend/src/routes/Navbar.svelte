@@ -7,8 +7,8 @@
     }
 </script>
 
-<nav>
-    <div class="fixed m-5">
+<nav class="">
+    <div class="fixed z-50 m-5">
         {#if !clicked}
             <button 
                 in:scale={{ duration: 150, delay: 200 }}
@@ -60,10 +60,10 @@
                     </li>
                     <li>
                         <a 
-                            href="/signup" 
+                            href="/sign-in" 
                             class="block py-2 px-3 hover:bg-stone-300 rounded-lg transition-colors"
                         >
-                            Sign Up
+                            Sign In
                         </a>
                     </li>
                 </ul>
