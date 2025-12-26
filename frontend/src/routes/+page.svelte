@@ -3,7 +3,7 @@
     import Marketing from "./Marketing.svelte";
 
     import ProviderNav from "$lib/components/provider/ProviderNav.svelte";
-    import ProviderContainer from "../lib/components/provider/ProviderContainer.svelte";
+    import ProviderContainer from "$lib/components/provider/ProviderContainer.svelte";
     import ProviderDashboard from "$lib/components/provider/ProviderDashboard.svelte";
 
     import { onMount } from "svelte";

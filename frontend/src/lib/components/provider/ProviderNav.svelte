@@ -1,4 +1,4 @@
-<div class="flex flex-col h-screen bg-stone-100">
+<div class="flex flex-col h-screen bg-stone-100 border-stone-300 border-r-3">
     <div class="text-black bg-stone-100 w-full text-center pt-10 pb-10">Crayts</div>
     <div class="h-8/10 grid place-items-center">
         <ul class="flex flex-col gap-3 ml-10 text-black pr-10">
