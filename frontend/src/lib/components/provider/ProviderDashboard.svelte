@@ -1,5 +1,7 @@
 <script>
     import ActiveRFQs from "./applets/marshmallows/ActiveRFQs.svelte";
+    import MonthlyRevenue from "./applets/graphs/MonthlyRevenue.svelte";
+    import ServiceDistribution from "./applets/graphs/ServiceDistribution.svelte";
 </script>
 
 <div class="w-full h-full">
@@ -8,10 +10,10 @@
     >
         Dashboard
     </div>
-    <div class="grid place-items-center bg-stone-200 h-100">
+    <div class="grid place-items-center bg-stone-200">
         <!-- All the stuff is contained in this -->
-        <div class="w-9/10">
-            <div>Good Day James</div>
+        <div class="grid w-9/10 gap-2 bg-stone-200">
+            <div class="text-black">Good Day James</div>
             <!-- TODO : Maybe move this to another container at some point -->
             <div class="flex flex-row gap-2">
                 <ActiveRFQs />
@@ -20,6 +22,16 @@
                 <ActiveRFQs />
                 <ActiveRFQs />
             </div>
+
+            <div class="flex flex-row gap-2 mb-2">
+                <MonthlyRevenue />
+                <ServiceDistribution />
+                
+
+            </div>
         </div>
+
     </div>
+
+
 </div>

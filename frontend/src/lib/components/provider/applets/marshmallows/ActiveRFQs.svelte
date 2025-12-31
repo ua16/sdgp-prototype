@@ -1,5 +1,7 @@
 <!-- Probably do functionality to query and stuff in this as well -->
-<div class="grid grid-cols-2 grid-rows-2 gap-4 max-w-70 rounded-full bg-stone-100 p-5">
+<div
+    class="grid grid-cols-2 grid-rows-2 gap-4 max-w-70 rounded-full bg-stone-100 p-5"
+>
     <div class="row-span-2 rounded-full grid place-items-center bg-fuchsia-100">
         <svg
             xmlns="http://www.w3.org/2000/svg"
