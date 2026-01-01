@@ -1,10 +1,8 @@
 <script>
-    import Navbar from "./Navbar.svelte";
-    import Marketing from "./Marketing.svelte";
 
     import ProviderNav from "$lib/components/provider/ProviderNav.svelte";
     import ProviderContainer from "$lib/components/provider/ProviderContainer.svelte";
-    import ProviderDashboard from "$lib/components/provider/ProviderDashboard.svelte";
+    import ProviderRFQs from "$lib/components/provider/ProviderRFQs.svelte";
 
     import { onMount } from "svelte";
 
@@ -16,12 +14,12 @@
 
 <div>
     {#if isSignedIn === false}
-        <Navbar />
-        <Marketing />
+        <p>404 Not Found</p>
+
     {:else}
         <ProviderContainer>
             <ProviderNav />
-            <ProviderDashboard />
+            <ProviderRFQs />
         </ProviderContainer>
     {/if}
 </div>
