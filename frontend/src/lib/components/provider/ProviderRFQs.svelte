@@ -1,7 +1,21 @@
-<script>
-    import ActiveRFQs from "./applets/marshmallows/ActiveRFQs.svelte";
-    import MonthlyRevenue from "./applets/graphs/MonthlyRevenue.svelte";
-    import ServiceDistribution from "./applets/graphs/ServiceDistribution.svelte";
+<script lang="ts">
+    async function getRFQs() {
+        try {
+            const response = await fetch("http://127.0.0.1:5000/rfqs");
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            // Parse JSON array directly
+            const rfqs = await response.json();
+            return rfqs;
+        } catch (err) {
+            console.error("Error fetching RFQs:", err);
+            return [];
+        }
+    }
+
+    let quotationsInfo = getRFQs();
 </script>
 
 <div class="w-full h-full">
@@ -27,13 +41,20 @@
                     type="text"
                     placeholder="Search"
                 />
-                <button class="max-h-7 rounded-full bg-stone-100 hover:bg-stone-200 pl-2 pr-2">
+                <button
+                    class="max-h-7 rounded-full bg-stone-100 hover:bg-stone-200 pl-2 pr-2"
+                >
                     Sort
                 </button>
-                <button class="max-h-7 rounded-full bg-stone-100 hover:bg-stone-200 pl-2 pr-2">
+                <button
+                    class="max-h-7 rounded-full bg-stone-100 hover:bg-stone-200 pl-2 pr-2"
+                >
                     Filter
                 </button>
-                <button class="max-h-7 rounded-full bg-stone-100 hover:bg-stone-200 pl-2 pr-2">:</button>
+                <button
+                    class="max-h-7 rounded-full bg-stone-100 hover:bg-stone-200 pl-2 pr-2"
+                    >:</button
+                >
             </div>
         </div>
 
@@ -50,17 +71,27 @@
                 </tr>
             </thead>
             <tbody class="bg-stone-100 text-black text-center">
-                {#each { length: 10 }, k}
+                {#await quotationsInfo}
                     <tr>
-                        <td>RFQ00{k}</td>
-                        <td>ABC Pvt Ltd</td>
-                        <td>Freight Forwarding</td>
-                        <td>SHN>JDH</td>
-                        <td>Jan 12, 2025</td>
-                        <td>Jan 30, 2025</td>
-                        <td>Pending</td>
+                        <td colspan="7">Loading...</td>
                     </tr>
-                {/each}
+                {:then data}
+                    {#each data as q}
+                        <tr>
+                            <td>{q.ident}</td>
+                            <td>{q.Shipper}</td>
+                            <td>{q.RequiredServices}</td>
+                            <td>{q.OriginDestination}</td>
+                            <td>{q.DateCreated}</td>
+                            <td>{q.Deadline}</td>
+                            <td>{q.Status}</td>
+                        </tr>
+                    {/each}
+                {:catch error}
+                    <tr>
+                        <td colspan="7">Error loading data: {error.message}</td>
+                    </tr>
+                {/await}
             </tbody>
         </table>
     </div>
