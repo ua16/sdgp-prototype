@@ -5,11 +5,8 @@
 </script>
 
 <div class="w-full h-full">
-    >
     <!-- Maybe refactor this to a separate thing so we have a way of always having a sign in -->
-    <div
-        class="text-black font-bold border-b-3 border-stone-300 bg-stone-100 p-2"
-    >
+    <div class="text-black font-bold border-b-3 border-stone-300 bg-stone-100 p-2">
         Dashboard
     </div>
     <div class="grid place-items-center bg-stone-200">

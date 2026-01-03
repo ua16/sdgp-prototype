@@ -1,4 +1,15 @@
 <script lang="ts">
+    function clamp(val, vmin, vmax) {
+        if (val < vmin) {
+            return vmin;
+        } else if (val > vmax) {
+            return vmax;
+        } else {
+            return val;
+        }
+    }
+
+    let rfqslen = 0;
     async function getRFQs() {
         try {
             const response = await fetch("http://127.0.0.1:5000/rfqs");
@@ -8,6 +19,8 @@
 
             // Parse JSON array directly
             const rfqs = await response.json();
+            rfqslen = rfqs.length;
+            console.log(rfqslen);
             return rfqs;
         } catch (err) {
             console.error("Error fetching RFQs:", err);
@@ -16,6 +29,9 @@
     }
 
     let quotationsInfo = getRFQs();
+
+    let firstQuoteStart = $state(0);
+    let quoteStepSize = 8;
 </script>
 
 <div class="w-full h-full">
@@ -76,16 +92,24 @@
                         <td colspan="7">Loading...</td>
                     </tr>
                 {:then data}
-                    {#each data as q}
-                        <tr>
-                            <td>{q.ident}</td>
-                            <td>{q.Shipper}</td>
-                            <td>{q.RequiredServices}</td>
-                            <td>{q.OriginDestination}</td>
-                            <td>{q.DateCreated}</td>
-                            <td>{q.Deadline}</td>
-                            <td>{q.Status}</td>
-                        </tr>
+                    {#each { length: quoteStepSize }, i}
+                        {#if i + firstQuoteStart < rfqslen}
+                            <tr>
+                                <td>{data[i + firstQuoteStart].ident}</td>
+                                <td>{data[i + firstQuoteStart].Shipper}</td>
+                                <td
+                                    >{data[i + firstQuoteStart]
+                                        .RequiredServices}</td
+                                >
+                                <td
+                                    >{data[i + firstQuoteStart]
+                                        .OriginDestination}</td
+                                >
+                                <td>{data[i + firstQuoteStart].DateCreated}</td>
+                                <td>{data[i + firstQuoteStart].Deadline}</td>
+                                <td>{data[i + firstQuoteStart].Status}</td>
+                            </tr>
+                        {/if}
                     {/each}
                 {:catch error}
                     <tr>
@@ -94,6 +118,24 @@
                 {/await}
             </tbody>
         </table>
+
+        <div class="p-10 text-black flex flex-row gap-3">
+            <button
+                onclick={() => {
+                    firstQuoteStart -= quoteStepSize;
+                    firstQuoteStart = clamp(firstQuoteStart, 0, rfqslen - quoteStepSize);
+                }}
+                class="rounded-full bg-stone-300 pl-10 pr-10">-</button
+            >
+            <button
+                onclick={() => {
+                    firstQuoteStart += quoteStepSize;
+                    firstQuoteStart = clamp(firstQuoteStart, 0, rfqslen - quoteStepSize);
+                }}
+                class="rounded-full bg-stone-300 pl-10 pr-10">+</button
+            >
+            <span>{firstQuoteStart}</span>
+        </div>
     </div>
 </div>
 
