@@ -1,5 +1,5 @@
 <script lang="ts">
-    function clamp(val, vmin, vmax) {
+    function clamp(val: number, vmin: number, vmax: number) {
         if (val < vmin) {
             return vmin;
         } else if (val > vmax) {
@@ -10,25 +10,30 @@
     }
 
     let rfqslen = 0;
-    async function getRFQs() {
-        try {
-            const response = await fetch("http://127.0.0.1:5000/rfqs");
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+    async function getRFQs(targetOrgId: number) {
+        const apiKey = "your-api-key-here";
 
-            // Parse JSON array directly
-            const rfqs = await response.json();
-            rfqslen = rfqs.length;
-            console.log(rfqslen);
-            return rfqs;
-        } catch (err) {
-            console.error("Error fetching RFQs:", err);
-            return [];
+        const response = await fetch("http://localhost:5000/rfqs", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-API-Key": apiKey,
+            },
+            body: JSON.stringify({ targetOrgId }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
         }
+
+        const rfqs = await response.json(); // <- saved to variable
+        rfqslen = rfqs.length;
+
+        return rfqs;
     }
 
-    let quotationsInfo = getRFQs();
+    const orgID = 1;
+    let quotationsInfo: Promise<any[]> = getRFQs(orgID);
 
     let firstQuoteStart = $state(0);
     let quoteStepSize = 8;
@@ -92,22 +97,18 @@
                         <td colspan="7">Loading...</td>
                     </tr>
                 {:then data}
-                    {#each { length: quoteStepSize }, i}
+                    {#each Array(quoteStepSize) as _, i}
                         {#if i + firstQuoteStart < rfqslen}
                             <tr>
-                                <td>{data[i + firstQuoteStart].ident}</td>
-                                <td>{data[i + firstQuoteStart].Shipper}</td>
-                                <td
-                                    >{data[i + firstQuoteStart]
-                                        .RequiredServices}</td
+                                <td>{data[i + firstQuoteStart].rfqid}</td>
+                                <td>{data[i + firstQuoteStart].companyName}</td
                                 >
-                                <td
-                                    >{data[i + firstQuoteStart]
-                                        .OriginDestination}</td
+                                <td>Freight</td>
+                                <td>{data[i + firstQuoteStart].origin} > {data[i + firstQuoteStart].destination}</td>
+                                <td>{data[i + firstQuoteStart].creationDate}</td
                                 >
-                                <td>{data[i + firstQuoteStart].DateCreated}</td>
-                                <td>{data[i + firstQuoteStart].Deadline}</td>
-                                <td>{data[i + firstQuoteStart].Status}</td>
+                                <td>{data[i + firstQuoteStart].expiryDate}</td>
+                                <td>Pending</td>
                             </tr>
                         {/if}
                     {/each}
@@ -123,14 +124,22 @@
             <button
                 onclick={() => {
                     firstQuoteStart -= quoteStepSize;
-                    firstQuoteStart = clamp(firstQuoteStart, 0, rfqslen - quoteStepSize);
+                    firstQuoteStart = clamp(
+                        firstQuoteStart,
+                        0,
+                        rfqslen - quoteStepSize,
+                    );
                 }}
                 class="rounded-full bg-stone-300 pl-10 pr-10">-</button
             >
             <button
                 onclick={() => {
                     firstQuoteStart += quoteStepSize;
-                    firstQuoteStart = clamp(firstQuoteStart, 0, rfqslen - quoteStepSize);
+                    firstQuoteStart = clamp(
+                        firstQuoteStart,
+                        0,
+                        rfqslen - quoteStepSize,
+                    );
                 }}
                 class="rounded-full bg-stone-300 pl-10 pr-10">+</button
             >

@@ -15,4 +15,6 @@ def near_future() -> datetime:
 def recent() -> datetime:
     return current_time - timedelta(days=randint(1,7), hours=randint(1,23))
 
+def past() -> datetime:
+    return current_time - timedelta(days=randint(400, 800))
 
