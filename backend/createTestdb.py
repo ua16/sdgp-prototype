@@ -63,6 +63,8 @@ CREATE TABLE IF NOT EXISTS rfq (
     netWeight REAL,
     height REAL,
     width REAL,
+    cargoValue INTEGER NOT NULL,
+    deliveryDate INTEGER NOT NULL,
     creationDate INTEGER NOT NULL,
     expiryDate INTEGER NOT NULL,
     needCargoInsurance INTEGER NOT NULL CHECK (needCargoInsurance IN (0, 1)),
@@ -83,6 +85,7 @@ cursor.execute("SELECT organizationID FROM organization;")
 results = cursor.fetchall()
 
 if len(results) < 10:
+    print("Creating Organizations")
     for i in range(1, 30):
         company = faker.company.Company()
         cursor.execute(
@@ -121,6 +124,7 @@ cursor.execute("SELECT * FROM rfq;")
 results = cursor.fetchall()
 
 if len(results) < 50:
+    print("Creating RFQs")
     for i in range(1, 70):
         company = choice(companies)
         cursor.execute(
@@ -134,13 +138,15 @@ if len(results) < 50:
                     netWeight,
                     height,
                     width,
+                    cargoValue,
+                    deliveryDate,
                     creationDate,
                     expiryDate,
                     needCargoInsurance,
                     specialInstructions,
                     issuingOrgID,
                     targetOrgID
-                    ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                    ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                 """,
             (
                 faker.airline.iatacode(),  # origin
@@ -155,6 +161,8 @@ if len(results) < 50:
                 randint(1, 200) * 0.75,  # netWeight
                 randint(10, 100) * 0.75,  # height
                 randint(20, 100) * 0.75,  # width
+                randint(5, 400) * 1000,  # cargoValue
+                faker.date.future(), # deliveryDate
                 faker.date.recent(),  # creationDate
                 faker.date.soon(),  # expiryDate
                 choice([0, 1]),  # needCargoInsurance
@@ -174,7 +182,6 @@ if len(results) < 50:
 
 
 connection.commit()
-
 
 
 connection.close()

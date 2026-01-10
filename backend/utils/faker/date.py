@@ -12,6 +12,9 @@ def soon() -> datetime:
 def near_future() -> datetime:
     return current_time + timedelta(weeks=randint(1, 3), days=randint(1,7))
 
+def future() -> datetime:
+    return current_time + timedelta(weeks=randint(3,10), days=randint(1,7))
+
 def recent() -> datetime:
     return current_time - timedelta(days=randint(1,7), hours=randint(1,23))
 

@@ -39,17 +39,17 @@
     let quoteStepSize = 8;
 </script>
 
-<div class="w-full h-full">
+<div class="w-full h-screen overflow-y-auto">
     <!-- Maybe refactor this to a separate thing so we have a way of always having a sign in -->
     <div
         class="text-black font-bold border-b-3 border-stone-300 bg-stone-100 p-2"
     >
-        Dashboard
+        RFQs
     </div>
-    <div class="grid place-items-center bg-stone-200 pt-8">
+    <div class="h-full grid place-items-center bg-stone-200 pt-8">
         <div class="flex flex-col text-black -full ml-2 gap-4">
-            <div class="flex flex-row gap-2 items-center">
-                <div class="flex flex-col">
+            <div class="flex flex-row gap-3 items-center">
+                <div class="flex flex-col mr-10">
                     <div class="font-bold text-xl">Requests for Quotations</div>
                     <div>
                         Browse and respond to RFQs sent by shippers relevant to
@@ -79,7 +79,7 @@
             </div>
         </div>
 
-        <table class="w-9/10 mt-8 mb-8 table-auto rounded-lg">
+        <table class="w-9/10 mt-8 table-auto rounded-lg">
             <thead class="h-10 bg-stone-300">
                 <tr class="text-black rounded-t-2xl">
                     <th>RFQ ID</th>
@@ -100,11 +100,22 @@
                     {#each Array(quoteStepSize) as _, i}
                         {#if i + firstQuoteStart < rfqslen}
                             <tr>
-                                <td>{data[i + firstQuoteStart].rfqid}</td>
-                                <td>{data[i + firstQuoteStart].companyName}</td
-                                >
+                                <td class="text-sky-800">
+                                    <a
+                                        href="/prv/rfqs/{data[
+                                            i + firstQuoteStart
+                                        ].rfqid}"
+                                    >
+                                        {data[i + firstQuoteStart].rfqid}
+                                    </a>
+                                </td>
+                                <td>{data[i + firstQuoteStart].companyName}</td>
                                 <td>Freight</td>
-                                <td>{data[i + firstQuoteStart].origin} > {data[i + firstQuoteStart].destination}</td>
+                                <td
+                                    >{data[i + firstQuoteStart].origin} > {data[
+                                        i + firstQuoteStart
+                                    ].destination}</td
+                                >
                                 <td>{data[i + firstQuoteStart].creationDate}</td
                                 >
                                 <td>{data[i + firstQuoteStart].expiryDate}</td>
@@ -120,7 +131,7 @@
             </tbody>
         </table>
 
-        <div class="p-10 text-black flex flex-row gap-3">
+        <div class="pl-10 pr-10 pb-10 pt-2 text-black flex flex-row gap-3">
             <button
                 onclick={() => {
                     firstQuoteStart -= quoteStepSize;

@@ -38,7 +38,7 @@ def create_app():
     def rfqs():
         db = get_db()
         cursor = db.cursor()
-        data = request.get_json(silent=True)
+        data = request.get_json()
 
         if not data or "targetOrgId" not in data:
             return jsonify({"error": "targetOrgId is required"}), 400
@@ -60,6 +60,59 @@ def create_app():
         rows = [dict(row) for row in rows]
 
         return jsonify(rows), 200
+
+    @app.route("/get-single-rfq", methods=["POST"])
+    def get_single_rfq():
+        db = get_db()
+        cursor = db.cursor()
+        data = request.get_json()
+
+        if not data or "targetOrgId" not in data or "targetRfq" not in data:
+            return jsonify({"error" : "targetOrgId and targetRfq are required fields"}), 400
+
+        targetOrgId, targetRfq = data["targetOrgId"], data["targetRfq"]
+
+        cursor.execute("""
+                       SELECT 
+
+                       r.rfqid,
+                       r.origin,
+                       r.destination,
+                       r.cargoType,
+                       r.commodity,
+                       r.hsCode,
+                       r.netWeight,
+                       r.height,
+                       r.width,
+                       r.cargoValue,
+                       datetime(r.deliveryDate) as deliveryDate,
+                       datetime(r.creationDate) as creationDate,
+                       datetime(r.expiryDate) expiryDate,
+                       r.needCargoInsurance,
+                       r.specialInstructions,
+
+                       o.companyName,
+                       o.companyAddress,
+                       o.email,
+                       o.phone,
+                       datetime(o.createdAt),
+                       o.orgType,
+                       o.bio
+
+                       FROM rfq as r
+                       LEFT JOIN
+                       organization as o
+                       on r.issuingOrgId = o.organizationID
+                       WHERE r.targetOrgId = ? AND r.rfqid = ?
+                       """, (targetOrgId, targetRfq)
+                       )
+
+        rows = cursor.fetchall()
+        rows = [dict(row) for row in rows]
+
+        return jsonify(rows), 200
+
+
 
     @app.teardown_appcontext
     def close_db(exception):

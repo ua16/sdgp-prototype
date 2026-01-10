@@ -6,8 +6,6 @@
     import ProviderSingleRFQ from "$lib/components/provider/ProviderSingleRFQ.svelte";
 </script>
 
-<h1>{data.rfqid}</h1>
-
 <div>
     <ProviderContainer>
         <ProviderNav />
